@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"flag"
 	"os"
 	"os/exec"
 	"time"
@@ -24,22 +23,18 @@ func main() {
 	}
 
 	log.Info().Msg("going to check command arguments")
-	var appName string
-	flag.StringVar(&appName, "app", "", "the name of the argocd app")
 
-	flag.Parse()
-
-	if appName == "" {
-		log.Panic().Msg("app flag is not given")
+	appName, err := getEnvVar("APP_NAME")
+	if err != nil {
+		log.Panic().Err(err).Msg("app name is not set")
 	}
 
-	log.Info().Msg("going to sync the application " + appName)
+	log.Info().Msgf("going to sync the application %s", appName)
 	_, err = runCommand("argocd app sync "+appName, server, token)
 
 	syncFailed := false
-
 	if err != nil {
-		log.Panic().Err(err).Msgf("problem trying to sync the application %s", appName)
+		log.Error().Err(err).Msgf("problem trying to sync the application %s", appName)
 		syncFailed = true
 	}
 

@@ -21,4 +21,4 @@ RUN chmod +x /usr/local/bin/argocd
 
 COPY --from=builder /app/argocd-sync /usr/local/bin/argocd-sync
 
-CMD ["argocd-sync", "--app", "$APP_NAME"]
+CMD ["argocd-sync"]
