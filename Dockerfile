@@ -1,4 +1,4 @@
-FROM golang:1.16.6-alpine3.14 as builder
+FROM golang:1.18-alpine3.16 as builder
 
 WORKDIR /app
 
@@ -9,7 +9,7 @@ RUN go build .
 CMD /app/main
 
 
-FROM alpine:3.14
+FROM alpine:3.16
 
 
 RUN apk update
@@ -21,4 +21,4 @@ RUN chmod +x /usr/local/bin/argocd
 
 COPY --from=builder /app/argocd-sync /usr/local/bin/argocd-sync
 
-CMD argocd-sync
+CMD ["argocd-sync", "--app", "$APP_NAME"]
