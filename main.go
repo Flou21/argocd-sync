@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"os/exec"
 	"time"
@@ -39,9 +40,10 @@ func main() {
 	}
 
 	log.Info().Msgf("going to wait for the application %s", appName)
-	_, err = runCommand("argocd app wait --sync "+appName, server, token)
+	output, err := runCommand("argocd app wait --sync "+appName, server, token)
+	fmt.Print(output)
 	if err != nil {
-		log.Panic().Err(err).Msgf("problem trying to wait the application %s", appName)
+		log.Error().Err(err).Msgf("problem trying to wait the application %s", appName)
 		syncFailed = true
 	}
 
