@@ -30,7 +30,7 @@ func main() {
 		log.Panic().Err(err).Msg("app name is not set")
 	}
 
-	log.Info().Msgf("going to sync the application %s", appName)
+	log.Info().Msgf("going to sync the application %s, server: %s, token: %d", appName, server, len(token))
 	_, err = runCommand("argocd app sync "+appName, server, token)
 
 	syncFailed := false
